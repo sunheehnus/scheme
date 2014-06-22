@@ -1,0 +1,11 @@
+(define (sin angle)
+  (define (cube x)
+	(* x x x))
+  (define (s angle)
+	(cond ((< (abs angle) 0.1) angle)
+		  (else (- (* 3 (s (/ angle 3.0)))
+				   (* 4 (cube (s (/ angle 3.0))))))))
+  (s angle))
+
+(display (sin (/ 3.1415926 4)))
+(newline)

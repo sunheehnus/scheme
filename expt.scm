@@ -21,6 +21,6 @@
   (define (square x) (* x x))
   (define (iter res b n)
 	(cond ((= n 0) res)
-		  ((even? n) (iter res (* b b) (/ n 2)))
+		  ((even? n) (iter res (square b) (/ n 2)))
 		  (else (iter (* res b) b (- n 1)))))
   (iter 1 b n))

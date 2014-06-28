@@ -11,6 +11,6 @@
 		  (else (find-divisor x (next div)))))
   (define (smallest-divisor x)
 	(find-divisor x 2))
-  (= (smallest-divisor n) n))
+  (and (> n 1) (= (smallest-divisor n) n)))
 
-(display (isprime? 113))
+(display (isprime? 2))

@@ -1,0 +1,10 @@
+(define (assoc x y)
+  (cond ((null? y)
+		 '())
+		((eq? x (caar y))
+		 (cdar y)
+		 )
+		(#t (assoc x (cdr y)))))
+
+(display (assoc 'x '((x hello) (x world))))
+(newline)

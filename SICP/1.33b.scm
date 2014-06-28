@@ -7,7 +7,7 @@
 							   result))))
   (iter a null-value))
 
-(define (prime_n-sum n)
+(define (prime_n-mul n)
   (define (GCD a b)
 	(if (= b 0)
 	  a
@@ -16,4 +16,7 @@
 	(= (GCD a n) 1))
   (define (self x) x)
   (define (inc x) (+ x 1))
-  (filtered-accumulate prime_n? + 0 self 1 inc n))
+  (filtered-accumulate prime_n? * 1 self 1 inc n))
+
+(display (prime_n-mul 10))
+(newline)

@@ -1,0 +1,10 @@
+(define (cont-frac n d k)
+  (define (recur x)
+	(if (= x k)
+	  (/ (n k) (d k))
+	  (/ (n k) (+ (d k) (recur (+ x 1))))))
+  (recur 1))
+
+(display (/ 1 (cont-frac (lambda (i) 1.0)
+				(lambda (i) 1.0)
+				1000)))

@@ -25,7 +25,7 @@
 
 (define (newtons-method g guess)
   (fixed-point (average-damp (newton-transform g)) guess))
-  ;(fixed-point (newton-transform g) guess))
+;(fixed-point (newton-transform g) guess))
 
 (define (cubic a b c)
   (lambda (x)
@@ -33,6 +33,11 @@
 	   (* a x x)
 	   (* b x)
 	   c)))
-
 (display (newtons-method (cubic 1 2 -42) 1.0))
+(newline)
+
+(define (sqrt x)
+  (newtons-method (lambda (y) (- (* y y) x))
+				  1.0))
+(display (sqrt 2))
 (newline)

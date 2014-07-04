@@ -6,6 +6,10 @@
   (make-interval (+ (lower-bound x) (lower-bound y))
 				 (+ (upper-bound x) (upper-bound y))))
 
+(define (sub-interval x y)
+  (make-interval (- (lower-bound x) (upper-bound y))
+				 (- (upper-bound x) (lower-bound y))))
+
 (define (mul-interval x y)
   (let ((p1 (* (lower-bound x) (lower-bound y)))
 		(p2 (* (lower-bound x) (upper-bound y)))
@@ -14,6 +18,34 @@
 	(make-interval (min p1 p2 p3 p4)
 				   (max p1 p2 p3 p4))))
 
-(define (sub-interval x y)
-  (make-interval (- (lower-bound x) (upper-bound y))
-				 (- (upper-bound x) (lower-bound y))))
+(define (div-interval x y)
+  (if (<= (* (upper-bound y) (lower-bound y)) 0)
+	#f
+	(mul-interval x
+				  (make-interval (/ 1.0 (upper-bound y))
+								 (/ 1.0 (lower-bound y))))))
+
+(define (mul-interval x y)
+  (let ((lx (lower-bound x))
+		(ux (upper-bound x))
+		(ly (lower-bound y))
+		(uy (upper-bound y)))
+	(let ((pos-lx? (positive? lx))
+		  (pos-ux? (positive? ux))
+		  (pos-ly? (positive? ly))
+		  (pos-uy? (positive? uy)))
+	  (cond ((and (not pos-lx?) (not pos-ly?)) (make-interval (* lx ly) (* ux uy)))
+			((and (not pos-lx?) pos-ly? (not pos-uy?)) (make-interval (* ux ly) (* ux uy)))
+			((and (not pos-lx?) pos-uy?) (make-interval (* ux ly) (* lx uy)))
+			((and pos-lx? (not pos-ux?) (not pos-ly?)) (make-interval (* lx uy) (* ux uy)))
+			((and pos-lx? (not pos-ux?) pos-ly? (not pos-uy?)) (let ((l1 (* ux ly))
+																	 (l2 (* lx uy))
+																	 (u1 (* ux uy))
+																	 (u2 (* lx ly)))
+																 (make-interval (min l1 l2) (max u1 u2))))
+			((and pos-lx? (not pos-ux?) pos-uy?) (make-interval (* ux ly) (* lx ly)))
+			((and pos-ux? (not pos-ly?)) (make-interval (* lx uy) (* ux ly)))
+			((and pos-ux? pos-ly? (not pos-uy?)) (make-interval (* lx uy) (* lx ly)))
+			((and pos-ux? pos-uy?) (make-interval (* ux uy) (* lx ly)))))))
+
+(display (mul-interval (make-interval -128 3) (make-interval -3 111)))

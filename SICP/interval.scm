@@ -1,6 +1,6 @@
 (define (make-interval a b) (cons a b))
-(define (upper-bound interval) (car interval))
-(define (lower-bound interval) (cdr interval))
+(define (upper-bound interval) (cdr interval))
+(define (lower-bound interval) (car interval))
 
 (define (add-interval x y)
   (make-interval (+ (lower-bound x) (lower-bound y))
@@ -48,4 +48,29 @@
 			((and pos-ux? pos-ly? (not pos-uy?)) (make-interval (* lx uy) (* lx ly)))
 			((and pos-ux? pos-uy?) (make-interval (* ux uy) (* lx ly)))))))
 
-(display (mul-interval (make-interval -128 3) (make-interval -3 111)))
+(define (make-center-width c w)
+  (make-interval (- c w) (+ c w)))
+
+(define (center i)
+  (/ (+ (lower-bound i) (upper-bound i)) 2))
+
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+
+(define (make-center-percent c p)
+	(make-center-width c (* c (/ p 100))))
+
+(define (percent i)
+  (* (/ (width i) (center i)) 100))
+
+(define test (make-center-width 10 1))
+(display test)
+(newline)
+(display (center test))
+(newline)
+(display (width test))
+(newline)
+(display (percent test))
+(newline)
+(display (make-center-percent (center test) (percent test)))
+(newline)

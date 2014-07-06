@@ -22,13 +22,42 @@
 
 (define (last-pair l)
   (cond ((null? l) #f)
-	((null? (cdr l)) (car l))
-	(#t (last-pair (cdr l)))))
+		((null? (cdr l)) (car l))
+		(#t (last-pair (cdr l)))))
 
 (define (reverse l)
   (define (iter res li)
-    (if (null? li)
-      res
-      (iter (cons (car li) res)
-	    (cdr li))))
+	(if (null? li)
+	  res
+	  (iter (cons (car li) res)
+			(cdr li))))
   (iter (list) l))
+
+(define (same-parity . lst)
+  (define (same-with-1st element) (eq? (odd? (car lst))
+									   (odd? element)))
+  (define (insert-with-judge element result)
+	(if (same-with-1st element)
+	  (cons element result)
+	  result))
+  (define (iter lst result)
+	(if (null? lst)
+	  result
+	  (iter (cdr lst) (insert-with-judge (car lst) result))))
+  (reverse (iter lst (list))))
+
+(define (same-parity . lst)
+  (define (same-with-1st element) (eq? (odd? (car lst))
+									   (odd? element)))
+  (define (append-with-judge element result)
+	(if (same-with-1st element)
+	  (append result (list element))
+	  result))
+  (define (iter lst result)
+	(if (null? lst)
+	  result
+	  (iter (cdr lst) (append-with-judge (car lst) result))))
+  (iter lst (list)))
+
+(display
+  (same-parity 2 3 4 5 6 7))

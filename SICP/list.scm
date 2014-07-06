@@ -59,5 +59,18 @@
 	  (iter (cdr lst) (append-with-judge (car lst) result))))
   (iter lst (list)))
 
-(display
-  (same-parity 2 3 4 5 6 7))
+(define (scale-list items factor)
+  (if (null? items)
+	(list)
+	(cons (* (car items) factor)
+		  (scale-list (cdr items) factor))))
+
+(define (map proc items)
+  (if (null? items)
+	(list)
+	(cons (proc (car items))
+		  (map proc (cdr items)))))
+
+(define (scale-list items factor)
+  (map (lambda (x) (* x factor)) items))
+

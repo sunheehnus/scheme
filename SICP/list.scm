@@ -81,3 +81,11 @@
 	(cons (square (car items)) (square-list (cdr items)))))
 (define (square-list items)
   (map (lambda (x) (* x x)) items))
+
+(define (for-each proc items)
+  (if (null? items)
+	#t
+	(begin
+	  (proc (car items))
+	  (for-each proc (cdr items)))))
+

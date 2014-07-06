@@ -15,5 +15,34 @@
 		  ((= kinds-of-coins 5) 50)))
   (cc amount 5))
 
-(display (count-change 1000))
+(display (count-change 100))
+(newline)
+
+(define (count-change amount coins)
+  (cond ((= amount 0) 1)
+		((or (< amount 0) (null? coins)) 0)
+		(else (+ (count-change amount (cdr coins))
+				 (count-change (- amount (car coins)) coins)))))
+
+(define us-coins (list 50 25 10 5 1))
+(display (count-change 100 us-coins))
+(newline)
+
+(define (count-change amount)
+  (define (no-more? coin-values)
+	(null? coin-values))
+  (define (except-first-denomination coin-values)
+	(cdr coin-values))
+  (define (first-denomination coin-values)
+	(car coin-values))
+  (define (cc amount coin-values)
+	(cond ((= amount 0) 1)
+		  ((or (< amount 0) (no-more? coin-values)) 0)
+		  (else (+ (cc amount
+					   (except-first-denomination coin-values))
+				   (cc (- amount
+						  (first-denomination coin-values))
+					   coin-values)))))
+  (cc 100 (list 1 5 10 25 50)))
+(display (count-change 100))
 (newline)

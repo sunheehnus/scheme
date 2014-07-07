@@ -89,3 +89,36 @@
 	  (proc (car items))
 	  (for-each proc (cdr items)))))
 
+(define (count-leave x)
+  (cond ((null? x) 0)
+		((not (pair? x)) 1)
+		(else (+ (count-leave (car x))
+				 (count-leave (cdr x))))))
+
+(define (deep-reverse x)
+  (define (parse element)
+	(if (pair? element)
+	  (deep-reverse element)
+	  element))
+  (define (deep-iter res lst)
+	(if (null? lst)
+	  res
+	  (deep-iter (cons (parse (car lst)) res)
+				 (cdr lst))))
+  (deep-iter (list) x))
+
+(define (fringe x)
+  (cond ((pair? x) (append (fringe (car x))
+						   (fringe (cdr x))))
+		((null? x) x)
+		(else (list x))))
+
+(define (fringe x)
+  (define (iter result lst)
+	(cond ((pair? lst) (iter (iter result (car lst)) (cdr lst)))
+		  ((null? lst) result)
+		  (else (cons lst result))))
+  (reverse (iter (list) x)))
+
+(define x (list (list 1 2) (list 3 4)))
+(display (fringe (list x x)))

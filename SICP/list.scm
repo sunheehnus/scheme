@@ -167,7 +167,7 @@
 (define (square-tree tree)
   (map (lambda (x) (if (pair? x)
 					 (square-tree x)
-					 (else (* x x))))
+					 (* x x)))
 	   tree))
 
 (define (tree-map proc tree)
@@ -180,3 +180,12 @@
   (define (square x)
 	(* x x))
   (tree-map square tree))
+
+(define (subsets set)
+  (if (null? set)
+	(list (list))
+	(let ((rest (subsets (cdr set))))
+	  (append rest (map (lambda (x) (append (list (car set)) x))
+						rest)))))
+
+(display (subsets (list 1 2 3)))

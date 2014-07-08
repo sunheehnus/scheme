@@ -130,18 +130,30 @@
   (car mobile))
 
 (define (right-branch mobile)
-  (car (cdr mobile)))
+  (cadr mobile))
 
 (define (branch-length branch)
   (car branch))
 
 (define (branch-structure branch)
-  (car (cdr branch)))
+  (cadr branch))
 
 (define (total-weight mobile)
-  (define (isLeaf mob)
-	(null? (cdr (cdr mob))))
-  (if (isLeaf mobile)
-	(cdr mobile)
+  (define (isLeaf? branch)
+	(not (pair? (branch-structure branch))))
+  (if (isLeaf? mobile)
+	(cadr mobile)
 	(+ (total-weight (car mobile))
 	   (total-weight (cdr mobile)))))
+
+(define (total-weight*length mobile)
+  (define (isLeaf? branch)
+	(not (pair? (branch-structure branch))))
+  (if (isLeaf? mobile)
+	(* (cadr mobile) (car mobile))
+	(+ (total-weight*length (car mobile))
+	   (total-weight*length (cdr mobile)))))
+
+(define (balance? mobile)
+  (eq? (total-weight*length (car mobile))
+	   (total-weight*length (cdr mobile))))

@@ -157,3 +157,26 @@
 (define (balance? mobile)
   (eq? (total-weight*length (car mobile))
 	   (total-weight*length (cdr mobile))))
+
+(define (square-tree tree)
+  (cond ((null? tree) (list))
+		((pair? tree) (cons (square-tree (car tree))
+							(square-tree (cdr tree))))
+		(else (* tree tree))))
+
+(define (square-tree tree)
+  (map (lambda (x) (if (pair? x)
+					 (square-tree x)
+					 (else (* x x))))
+	   tree))
+
+(define (tree-map proc tree)
+  (cond ((null? tree) (list))
+		((pair? tree) (cons (tree-map proc (car tree))
+							(tree-map proc (cdr tree))))
+		(else (proc tree))))
+
+(define (square-tree tree)
+  (define (square x)
+	(* x x))
+  (tree-map square tree))

@@ -130,13 +130,13 @@
   (car mobile))
 
 (define (right-branch mobile)
-  (cdr mobile))
+  (car (cdr mobile)))
 
 (define (branch-length branch)
   (car branch))
 
 (define (branch-structure branch)
-  (cdr branch))
+  (car (cdr branch)))
 
 (define (total-weight mobile)
   (define (isLeaf mob)

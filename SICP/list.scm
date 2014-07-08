@@ -120,5 +120,28 @@
 		  (else (cons lst result))))
   (reverse (iter (list) x)))
 
-(define x (list (list 1 2) (list 3 4)))
-(display (fringe (list x x)))
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (cdr mobile))
+
+(define (branch-length branch)
+  (car branch))
+
+(define (branch-structure branch)
+  (cdr branch))
+
+(define (total-weight mobile)
+  (define (isLeaf mob)
+	(null? (cdr (cdr mob))))
+  (if (isLeaf mobile)
+	(cdr mobile)
+	(+ (total-weight (car mobile))
+	   (total-weight (cdr mobile)))))

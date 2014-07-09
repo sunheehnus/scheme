@@ -176,9 +176,10 @@
 							(tree-map proc (cdr tree))))
 		(else (proc tree))))
 
+(define (square x)
+  (* x x))
+
 (define (square-tree tree)
-  (define (square x)
-	(* x x))
   (tree-map square tree))
 
 (define (subsets set)
@@ -188,4 +189,77 @@
 	  (append rest (map (lambda (x) (append (list (car set)) x))
 						rest)))))
 
-(display (subsets (list 1 2 3)))
+(define (sum-odd-squares tree)
+  (cond ((null? tree) 0)
+		((not (pair? tree))
+		 (if (odd? tree) (square tree) 0))
+		(else (+ (sum-odd-squares (car tree))
+				 (sum-odd-squares (cdr tree))))))
+(define (fib x)
+  (if (< x 2)
+	x
+	(+ (fib (- x 1)) (fib (- x 2)))))
+
+(define (even-fibs n)
+  (define (next k)
+	(if (> k n)
+	  (list)
+	  (let ((f (fib k)))
+		(if (even? f)
+		  (cons f (next (+ k 1)))
+		  (next (+ k 1))))))
+  (next 0))
+
+(define (filter predicate sequence)
+  (cond ((null? sequence) (list))
+		((predicate (car sequence))
+		 (cons (car sequence)
+			   (filter predicate (cdr sequence))))
+		(else (filter predicate (cdr sequence)))))
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+	initial
+	(op (car sequence)
+		(accumulate op initial (cdr sequence)))))
+
+(define (enumerate-interval low high)
+  (if (> low high)
+	(list)
+	(cons low (enumerate-interval (+ low 1) high))))
+
+(define (enumerate-tree tree)
+  (cond ((pair? tree) (append (enumerate-tree (car tree))
+						   (enumerate-tree (cdr tree))))
+		((null? tree) (list))
+		(else (list tree))))
+
+(define (sum-odd-squares tree)
+  (accumulate +
+			  0
+			  (map square
+					   (filter odd?
+							   (enumerate-tree tree)))))
+
+(define (even-fibs n)
+  (accumulate cons
+			  (list)
+			  (filter even?
+					  (map fib
+						   (enumerate-interval 0 n)))))
+
+(define (list-fib-squares n)
+  (accumulate cons
+			  (list)
+			  (map square
+				   (map fib
+						(enumerate-interval 0 n)))))
+
+(define (product-of-square-of-odd-elements sequence)
+  (accumulate *
+			  1
+			  (map square
+				   (filter odd? sequence))))
+(display
+(product-of-square-of-odd-elements (list 1 2 3 4 5))
+ )

@@ -283,3 +283,61 @@
 			  0
 			  (map enumerate-tree
 				   t)))
+
+(define (gen-pairs n)
+  (accumulate append (list)
+			  (map (lambda (x)
+					 (map (lambda (y) (list x y))
+						  (enumerate-interval 1 (- x 1))))
+				   (enumerate-interval 1 n))))
+
+(define (flatmap proc seq)
+  (accumulate append (list) (map proc seq)))
+
+(define (gen-pairs n)
+  (flatmap (lambda (x) (map (lambda (y) (list x y))
+							(enumerate-interval 1 (- x 1))))
+		   (enumerate-interval 1 n)))
+
+(define (isprime? n)
+  (define (next x)
+	(if (= x 2)
+	  3
+	  (+ x 2)))
+  (define (find-divisor x div) ;find div that can be divided by x
+	(define (square x)
+	  (* x x))
+	(cond ((= (remainder x div) 0) div)
+		  ((> (square div) x) x)
+		  (else (find-divisor x (next div)))))
+  (define (smallest-divisor x)
+	(find-divisor x 2))
+  (and (> n 1) (= (smallest-divisor n) n)))
+
+(define (prime-sum? pair)
+  (isprime? (+ (car pair) (cadr pair))))
+
+(define (make-pair-sum pair)
+  (define (triple-sum x y)
+	(list x y (+ x y)))
+  (triple-sum (car pair) (cadr pair)))
+
+(define (prime-sum-pairs n)
+  (map make-pair-sum (filter prime-sum? (gen-pairs n)))
+  )
+
+(define (permutations s)
+  (if (null? s)
+	(list (list))
+	(flatmap (lambda (x)
+			   (map (lambda (p) (cons x p))
+					(permutations (remove x s))))
+			 s)))
+
+(define (remove item sequence)
+  (filter (lambda (x) (not (eq? x item)))
+		  sequence))
+
+(display
+  (permutations (list 1 2 3 4)))
+

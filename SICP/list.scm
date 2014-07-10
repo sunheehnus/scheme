@@ -338,6 +338,44 @@
   (filter (lambda (x) (not (eq? x item)))
 		  sequence))
 
-(display
-  (permutations (list 1 2 3 4)))
+(define (unique-pairs n)
+  (accumulate append (list)
+			  (map (lambda (x)
+					 (map (lambda (y) (list x y))
+						  (enumerate-interval 1 (- x 1))))
+				   (enumerate-interval 1 n))))
 
+(define (prime-sum-pairs n)
+  (map make-pair-sum (filter prime-sum? (unique-pairs n)))
+  )
+
+(define (gen-tripple-group n)
+  (accumulate append (list)
+			  (accumulate append (list) (map
+										  (lambda (x)
+											(map
+											  (lambda (y)
+												(map
+												  (lambda (z)
+													(list x y z))
+												  (enumerate-interval 1 (- y 1))))
+											  (enumerate-interval 1 (- x 1))))
+										  (enumerate-interval 1 n))
+						  )))
+
+(define (gen-tripple-group n)
+  (flatmap (lambda (x) x)
+		   (flatmap
+			 (lambda (x)
+			   (map
+				 (lambda (y)
+				   (map
+					 (lambda (z)
+					   (list x y z))
+					 (enumerate-interval 1 (- y 1))))
+				 (enumerate-interval 1 (- x 1))))
+			 (enumerate-interval 1 n))
+		   ))
+
+(display (gen-tripple-group 10))
+(newline)

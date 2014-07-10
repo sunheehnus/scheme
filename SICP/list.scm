@@ -230,7 +230,7 @@
 
 (define (enumerate-tree tree)
   (cond ((pair? tree) (append (enumerate-tree (car tree))
-						   (enumerate-tree (cdr tree))))
+							  (enumerate-tree (cdr tree))))
 		((null? tree) (list))
 		(else (list tree))))
 
@@ -238,8 +238,8 @@
   (accumulate +
 			  0
 			  (map square
-					   (filter odd?
-							   (enumerate-tree tree)))))
+				   (filter odd?
+						   (enumerate-tree tree)))))
 
 (define (even-fibs n)
   (accumulate cons

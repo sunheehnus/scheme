@@ -1,4 +1,4 @@
-; basic methods
+;;;;;;;;;;;;;;;;;;;;;;;;basic methods;;;;;;;;;;;;;;;;;;;;;;;;
 (define (enumerate-interval low high)
   (if (> low high)
 	(list)
@@ -12,8 +12,9 @@
 
 (define (flatmap proc seq)
   (accumulate append (list) (map proc seq)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; methods of queens
+;;;;;;;;;;;;;;;;;;;;;;;methods of queens;;;;;;;;;;;;;;;;;;;;;
 (define (build-empty-board board-size)
   (define (iter size empty-element result)
 	(if (< size board-size)
@@ -102,8 +103,9 @@
 				 (enumerate-interval 1 board-size)))
 		  (queen-cols (- k 1))))))
   (queen-cols board-size))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; output methods
+;;;;;;;;;;;;;;;;;;;;;;output methods;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (output-board board)
   (if (not (null? board))
 	(begin
@@ -118,9 +120,27 @@
 	  (output-board (car results))
 	  (newline)
 	  (output (cdr results)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; final result
-(define board-size 9)
+;;;;;;;;;;;;;;;;;;;;;;test for 2.43;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define (queens board-size)
+  ;(define (queen-cols k)
+	;(if (= k 0)
+	  ;(list empty-board)
+	  ;(filter
+		;(lambda (positions) (safe? k positions))
+		;(flatmap
+		  ;(lambda (new-row)
+			;(map (lambda (rest-of-queens)
+				   ;(adjoin-position new-row k rest-of-queens))
+				 ;(queen-cols (- k 1))))
+		  ;(enumerate-interval 1 board-size)))))
+  ;(queen-cols board-size))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;final result;;;;;;;;;;;;;;;;;;;;;;;;;
+(define board-size 7)
 (define empty-board (build-empty-board board-size))
 (define results (queens board-size))
 (output results)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,3 +1,4 @@
+; basic methods
 (define (enumerate-interval low high)
   (if (> low high)
 	(list)
@@ -12,35 +13,15 @@
 (define (flatmap proc seq)
   (accumulate append (list) (map proc seq)))
 
-(define board-size 8)
-
-(define (build-empty-line)
-  (define (iter size result)
+; methods of queens
+(define (build-empty-board board-size)
+  (define (iter size empty-element result)
 	(if (< size board-size)
-	  (iter (+ size 1) (cons 0 result))
+	  (iter (+ size 1) empty-element (cons empty-element result))
 	  result))
-  (iter 0 (list)))
-
-(define (build-empty-board)
-  (define empty-line (build-empty-line))
-  (define (iter size result)
-	(if (< size board-size)
-	  (iter (+ size 1) (cons empty-line result))
-	  result))
-  (iter 0 (list)))
-
-;(define empty-board
-  ;(list (list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)
-		;(list 0 0 0 0 0 0 0 0)))
-
-(define empty-board
-  (build-empty-board))
+  (iter 0
+		(iter 0 0 (list))
+		(list)))
 
 (define (get-position row col board)
   (define (get-col k line)
@@ -122,8 +103,7 @@
 		  (queen-cols (- k 1))))))
   (queen-cols board-size))
 
-(define results (queens 8))
-
+; output methods
 (define (output-board board)
   (if (not (null? board))
 	(begin
@@ -139,4 +119,8 @@
 	  (newline)
 	  (output (cdr results)))))
 
+; final result
+(define board-size 9)
+(define empty-board (build-empty-board board-size))
+(define results (queens board-size))
 (output results)

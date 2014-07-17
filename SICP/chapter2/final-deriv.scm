@@ -75,3 +75,11 @@
 (newline)
 (display (deriv '(* x y (+ x 3)) 'x))
 (newline)
+
+(define (make-prefix middle)
+  (cond ((null? (cdr middle)) (car middle))
+		(else (cond ((eq? (cadr middle) +) (make-sum (car middle) (make-prefix (cddr middle))))
+					((eq? (cadr middle) *) (make-product (car middle) (make-prefix (caddr middle))))))))
+(display
+  (make-prefix '(x + (3 *  (x + (y + 2)))))
+  )

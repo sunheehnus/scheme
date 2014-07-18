@@ -87,46 +87,34 @@
 
 (define (make-prefix middle)
   (define (high? flag1 flag2)
-	(cond ((and (eq? flag1 '*) (eq? flag2 '+) #t)
-		   else #f))
-	)
-  (define (make-final flag head-element rear-element)
-	(cond ((eq? flag +) (make-sum head-element rear-element))
-		  ((eq? flag *) (make-product head-element rear-element))))
+	(cond ((and (eq? flag1 '*) (eq? flag2 '+)) #t)
+		  (else #f)))
+  (define (make-one-step flag head-element rear-element)
+	(cond ((eq? flag '+) (make-sum head-element rear-element))
+		  ((eq? flag '*) (make-product head-element rear-element))))
   (define (make-with-priority flag head-element rear-element middle)
 	(if (null? middle)
-	  (make-final flag head-element rear-element)
-	  (else (let ((next-flag (car middle))
-				  (next-element (make-prefix (cadr middle)))
-				  (next-middle (cddr middle)))
-			  (if (high? next-flag flag)
-				(make-with-priority flag
-									head-element
-									(make-one-step next-flag rear-element next-element)
-									next-middle
-									)
-				(make-with-priority next-flag
-									(make-one-step flag head-element rear-element)
-									next-element
-									next-middle
-									))))))
+	  (make-one-step flag head-element rear-element)
+	  (let ((next-flag (car middle))
+			(next-element (make-prefix (cadr middle)))
+			(next-middle (cddr middle)))
+		(if (high? next-flag flag)
+		  (make-with-priority flag
+							  head-element
+							  (make-one-step next-flag rear-element next-element)
+							  next-middle)
+		  (make-with-priority next-flag
+							  (make-one-step flag head-element rear-element)
+							  next-element
+							  next-middle)))))
   (cond ((not (pair? middle)) middle)
-		((null? (cdr middle)) (car middle))
+		((null? (cdr middle)) (if (not (pair? (car middle)))
+								(car middle)
+								(make-prefix (car middle))))
 		(else (let ((flag (cadr middle))
 					(head-element (make-prefix (car middle)))
 					(rear-element (make-prefix (caddr middle)))
 					(next-middle (cdddr middle)))
-				(make-with-priority flag head-element rear-element next-middle))))
-  )
-;(display
-  ;(make-prefix '(x + (3 *  (x + (y + 2)))))
-  ;)
-;(display
-  ;(make-prefix '1)
-  ;)
-;(display
-  ;(make-prefix '(1))
-  ;)
-;(display
-  ;(make-prefix '(1 + 1))
-  ;)
+				(make-with-priority flag head-element rear-element next-middle)))))
+(display (make-prefix '(x + 3 *  (x + y + 2))))
+(newline)

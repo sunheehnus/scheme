@@ -80,3 +80,35 @@
 (define sample-message '(A D A B B C A))
 (display (encode sample-message sample-tree))
 (newline)
+
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+
+(define (successive-merge nodes)
+  (if (null? (cdr nodes))
+	(car nodes)
+	(successive-merge (adjoin-set (make-code-tree (car nodes) (cadr nodes))
+								  (cddr nodes)))))
+
+(define (print-huffman-tree huffman-tree)
+  (define (format-output content level)
+	(if (> level 0)
+	  (begin
+		(display "		")
+		(format-output content (- level 1)))
+	  (begin
+		(display "|-")
+		(display content)
+		(newline))))
+  (define (print htree level)
+	(if (leaf? htree)
+	  (format-output (append (symbols htree) (weight htree)) level)
+	  (begin
+		(print (left-branch htree) (+ level 1))
+		(format-output (append (symbols htree) (weight htree)) level)
+		(print (right-branch htree) (+ level 1)))))
+  (print huffman-tree 0))
+
+;(display (generate-huffman-tree '((A 2) (NA 16) (BOOM 1) (SHA 3) (GET 2) (YIP 9) (JOB 2) (WAH 1))))
+(print-huffman-tree (generate-huffman-tree '((A 2) (NA 16) (BOOM 1) (SHA 3) (GET 2) (YIP 9) (JOB 2) (WAH 1))))
+(newline)
